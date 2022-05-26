@@ -1,4 +1,4 @@
-const { authService, tokenService } = require('../services');
+const { authService, tokenService, emailService, userService } = require('../services');
 const { constants } = require('../constants');
 
 class AuthController {
@@ -7,10 +7,12 @@ class AuthController {
       const { username, email, password } = req.body;
 
       const user = await authService.signUp({ username, email, password });
-      const { _id } = user;
+      const { _id, confirmationLink } = user;
 
       const { accessToken, refreshToken } = tokenService.generateTokenPair({ userId: _id, userEmail: email });
       const savedTokenPair = await tokenService.saveTokenPair(accessToken, refreshToken, _id);
+
+      await emailService.sendConfirmationMail(email, `${process.env.API_URL}/auth/confirmEmail/${confirmationLink}`);
 
       res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
@@ -54,6 +56,23 @@ class AuthController {
 
       const deletedTokens = await tokenService.deleteById(tokenId);
       res.json(deletedTokens);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async confirmEmail(req, res, next) {
+    try {
+      const confirmationLink = req.params.link;
+
+      const user = await userService.findByConfirmationLink(confirmationLink);
+      if (user.confirmationLink !== null) {
+        return res.send('Email already confirmed');
+      }
+
+      await userService.confirmEmail(user._id);
+
+      res.send('Your email successfuly confirmed');
     } catch (e) {
       next(e);
     }

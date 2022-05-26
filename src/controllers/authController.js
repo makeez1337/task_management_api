@@ -66,7 +66,8 @@ class AuthController {
       const confirmationLink = req.params.link;
 
       const user = await userService.findByConfirmationLink(confirmationLink);
-      if (user.confirmationLink !== null) {
+
+      if (user.confirmedAt !== null) {
         return res.send('Email already confirmed');
       }
 

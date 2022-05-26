@@ -14,7 +14,6 @@ const taskSchema = new Schema({
   },
   isDone: {
     type: Boolean,
-    required: true,
     default: false,
   },
   priority: {

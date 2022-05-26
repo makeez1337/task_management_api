@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const { v4: uuidv4 } = require('uuid');
 const mongoose = require('mongoose');
 const { Schema, model } = mongoose;
 
@@ -22,8 +23,12 @@ const userSchema = new Schema({
     minlength: 6,
   },
   confirmedAt: {
-    type: String,
+    type: Date,
     default: null,
+  },
+  confirmationLink: {
+    type: String,
+    default: uuidv4(),
   },
 });
 

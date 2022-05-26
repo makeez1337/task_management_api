@@ -18,7 +18,7 @@ app.listen(appConfig.PORT, async () => {
   console.log(`Server on PORT ${appConfig.PORT} has started`);
 
   try {
-    await mongoose.connect(dbConfig.URI);
+    await mongoose.connect(dbConfig.URL);
     console.log('DB CONNECTED');
   } catch (e) {
     console.log(e);

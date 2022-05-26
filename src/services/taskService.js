@@ -1,5 +1,4 @@
 const { Task } = require('../models');
-const { ErrorHandler } = require('../errors');
 
 class TaskService {
   create(userId, title, description, priority, dueDate) {
@@ -7,11 +6,7 @@ class TaskService {
   }
 
   findById(taskId) {
-    try {
     return Task.findById(taskId);
-    } catch (e) {
-      throw new ErrorHandler(e.message);
-    }
   }
 
   findByIdAndUpdate(taskId, dataToUpdate) {

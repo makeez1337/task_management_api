@@ -8,6 +8,10 @@ class TaskMiddleware {
 
     const task = await taskService.findById(taskId);
 
+    if (!task) {
+      return next(new ErrorHandler('Such task doesnt exists'));
+    }
+
     if (_id.toString() !== task.userId.toString()) {
       return next(new ErrorHandler('You cant change this task'), 403);
     }

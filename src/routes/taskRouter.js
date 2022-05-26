@@ -7,8 +7,9 @@ const router = Router();
 
 router.post('/create', authMiddleware.checkAccessToken, taskController.create);
 router.patch('/update', authMiddleware.checkAccessToken, taskMiddleware.validUserTask, taskController.update);
-router.patch('/markAsDone', authMiddleware.checkAccessToken, taskMiddleware.validUserTask, taskController.markAsDone)
-router.patch('/unmarkAsDone', authMiddleware.checkAccessToken, taskMiddleware.validUserTask, taskController.unmarkAsDone)
+router.patch('/markAsDone', authMiddleware.checkAccessToken, taskMiddleware.validUserTask, taskController.markAsDone);
+router.patch('/unmarkAsDone', authMiddleware.checkAccessToken, taskMiddleware.validUserTask, taskController.unmarkAsDone);
+router.delete('/delete', authMiddleware.checkAccessToken, taskMiddleware.validUserTask, taskController.delete);
 
 module.exports = {
   taskRouter: router,

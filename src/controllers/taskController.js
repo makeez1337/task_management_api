@@ -1,4 +1,4 @@
-const { taskService } = require('../services/taskService');
+const { taskService } = require('../services');
 
 class TaskController {
   async create(req, res, next) {

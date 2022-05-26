@@ -12,6 +12,20 @@ class TaskController {
       next(e);
     }
   }
+
+  async update(req, res, next) {
+    try {
+      const user = req.user;
+      const task = req.task;
+
+      const { taskId, ...dataToUpdate } = req.body;
+
+      const updatedTask = await taskService.findByIdAndUpdate(taskId, dataToUpdate);
+      res.json(updatedTask);
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 module.exports = {

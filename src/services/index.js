@@ -3,6 +3,7 @@ const { bcryptService } = require('./bcryptService');
 const { tokenService } = require('./tokenService');
 const { userService } = require('./userService');
 const { emailService } = require('./emailService');
+const { taskService } = require('./taskService');
 
 module.exports = {
   authService,
@@ -10,4 +11,5 @@ module.exports = {
   bcryptService,
   userService,
   emailService,
+  taskService,
 };

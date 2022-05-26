@@ -80,6 +80,27 @@ class AuthController {
       next(e);
     }
   }
+
+  async refreshTokens(req, res, next) {
+    try {
+      const user = req.user;
+      const { _id, email } = user;
+
+      const { accessToken, refreshToken } = tokenService.generateTokenPair({ userId: _id, userEmail: email });
+      const savedTokenPair = await tokenService.saveTokenPair(accessToken, refreshToken, _id);
+
+      res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        maxAge: constants.cookieMaxAge,
+      });
+      res.json({
+        user,
+        tokenPair: savedTokenPair,
+      });
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 module.exports = {

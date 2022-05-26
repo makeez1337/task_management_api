@@ -55,6 +55,8 @@ class AuthController {
       const { _id: tokenId } = await tokenService.findByUserId(_id);
 
       const deletedTokens = await tokenService.deleteById(tokenId);
+
+      res.clearCookie('refreshToken');
       res.json(deletedTokens);
     } catch (e) {
       next(e);

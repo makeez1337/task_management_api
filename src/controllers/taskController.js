@@ -45,6 +45,17 @@ class TaskController {
       next(e);
     }
   }
+
+  async delete(req, res, next) {
+    try {
+      const { _id } = req.task;
+
+      const deletedTask = await taskService.delete(_id);
+      res.json(deletedTask);
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 module.exports = {

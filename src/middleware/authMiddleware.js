@@ -1,4 +1,5 @@
-const { userService, bcryptService } = require('../services');
+const { constants } = require('../constants');
+const { userService, bcryptService, tokenService } = require('../services');
 const { ErrorHandler } = require('../errors');
 
 class AuthMiddleware {
@@ -26,6 +27,33 @@ class AuthMiddleware {
 
       await bcryptService.comparePassword(password, hashedPassword);
 
+      next();
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async checkAccessToken(req, res, next) {
+    try {
+      const accessToken = req.get(constants.Authorization);
+
+      if (!accessToken) {
+        return next(new ErrorHandler('Token is not valid', 401));
+      }
+
+      const tokenPair = await tokenService.findByAccessToken(accessToken);
+      if (!tokenPair) {
+        return next(new ErrorHandler('Token is not valid'), 401);
+      }
+
+      const { userEmail } = await tokenService.verifyToken(accessToken);
+      const user = await userService.findByEmail(userEmail);
+
+      if (!user) {
+        return next(new ErrorHandler('Token is not valid', 401));
+      }
+
+      req.user = user;
       next();
     } catch (e) {
       next(e);

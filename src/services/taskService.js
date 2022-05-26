@@ -12,6 +12,16 @@ class TaskService {
   findByIdAndUpdate(taskId, dataToUpdate) {
     return Task.findByIdAndUpdate(taskId, { ...dataToUpdate }, { new: true });
   }
+
+  markTask(taskId, action) {
+    let isDone = true;
+
+    if (action === 'unmarkAsDone') {
+      isDone = false;
+    }
+
+    return Task.findByIdAndUpdate(taskId, { isDone }, { new: true });
+  }
 }
 
 module.exports = {

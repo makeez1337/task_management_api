@@ -17,8 +17,26 @@ class TokenService {
     };
   }
 
-  saveTokenPair(accessToken, refreshToken, userId) {
+  async saveTokenPair(accessToken, refreshToken, userId) {
+    const tokenPair = await this.findByUserId(userId);
+
+    if (tokenPair) {
+      tokenPair.accessToken = accessToken;
+      tokenPair.refreshToken = refreshToken;
+
+      await tokenPair.save({});
+      return {
+        accessToken,
+        refreshToken,
+        userId,
+      };
+    }
+
     return Tokens.create({ accessToken, refreshToken, userId });
+  }
+
+  findByUserId(userId) {
+    return Tokens.findOne().where({ userId });
   }
 }
 

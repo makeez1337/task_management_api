@@ -1,7 +1,7 @@
 const { User } = require('../models');
 
 class AuthService {
-  registration(data) {
+  signUp(data) {
     return User.create({ ...data });
   }
 }

@@ -44,6 +44,10 @@ class TokenService {
     return Tokens.findOne().where({ accessToken });
   }
 
+  findByRefreshToken(refreshToken) {
+    return Tokens.findOne().where({ refreshToken });
+  }
+
   async verifyToken(token, tokenType = 'access') {
     try {
       let secretKey = process.env.SECRET_ACCESS_KEY;

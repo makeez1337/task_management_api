@@ -59,6 +59,29 @@ class AuthMiddleware {
       next(e);
     }
   }
+
+  async checkRefreshToken(req, res, next) {
+    try {
+      const refreshToken = req.get(constants.Authorization);
+
+      const tokenPair = await tokenService.findByRefreshToken(refreshToken);
+      if (!tokenPair) {
+        return next(new ErrorHandler('Token is not valid'), 401);
+      }
+
+      const { userEmail } = await tokenService.verifyToken(refreshToken, 'refresh');
+      const user = await userService.findByEmail(userEmail);
+
+      if (!user) {
+        return next(new ErrorHandler('Token is not valid', 401));
+      }
+
+      req.user = user;
+      next();
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 module.exports = {

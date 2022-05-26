@@ -22,6 +22,10 @@ class TaskService {
 
     return Task.findByIdAndUpdate(taskId, { isDone }, { new: true });
   }
+
+  delete(taskId) {
+    return Task.findByIdAndDelete(taskId);
+  }
 }
 
 module.exports = {
